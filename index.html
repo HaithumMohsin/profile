@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haytham M. Mohsin — Biotechnology & Quality Systems</title>
+  <meta name="description" content="Portfolio of Haytham M. Mohsin — Final-Year Biotechnology Student at IIUI, ISO Quality Systems Consultant, and Bioproduct Researcher.">
+
+  <!-- Typography: Newsreader (Editorial Serif) + Plus Jakarta Sans + Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons: FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS CDN + Force Class-Based Dark Mode -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+
+  <!-- Immediate Theme Initializer: Default to Light Theme -->
+  <script>
+    (function() {
+      try {
+        const savedTheme = localStorage.getItem('haytham_theme_manual');
+        if (savedTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Early Image Fallback & Local File Handlers -->
+  <script>
+    function handlePortraitFallback(img) {
+      if (!img.dataset.retryCount) img.dataset.retryCount = 0;
+      const count = parseInt(img.dataset.retryCount);
+      const candidates = [
+        'https://drive.google.com/thumbnail?id=1kDiPy2_KagTCivcdaLY5pcb7eDudW5R4&sz=w1000',
+        'https://drive.google.com/uc?export=view&id=1kDiPy2_KagTCivcdaLY5pcb7eDudW5R4',
+        'Haytham%20Profile%20pic.jpg',
+        'Haytham Profile pic.jpg',
+        './Haytham Profile pic.jpg',
+        'Haytham Profile pic.png',
+        'Haytham Profile pic.jpeg'
+      ];
+      if (count < candidates.length) {
+        img.dataset.retryCount = count + 1;
+        img.src = candidates[count];
+      } else {
+        img.onerror = null;
+        const uploadBox = document.getElementById('portrait-uploader-box');
+        if (uploadBox) uploadBox.classList.remove('hidden');
+      }
+    }
+
+    function uploadLocalPortrait(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const photo = document.getElementById('hero-portrait-img');
+        if (photo) photo.src = e.target.result;
+        try { localStorage.setItem('haytham_portrait_data', e.target.result); } catch (err) {}
+        const uploadBox = document.getElementById('portrait-uploader-box');
+        if (uploadBox) uploadBox.classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-page: #faf9f5;
+      --bg-surface: #ffffff;
+      --bg-surface-elevated: #f4f2ea;
+      --text-main: #0c0a09;
+      --text-muted: #1c1917;
+      --text-light: #292524;
+      --border: #a8a29e;
+      --border-focus: #292524;
+      --accent: #0c0a09;
+      --accent-hover: #1c1917;
+      --accent-soft: rgba(12, 10, 9, 0.06);
+      --accent-border: #57534e;
+      --badge-bg: #f5f4ef;
+    }
+
+    .dark {
+      --bg-page: #0c0a09;
+      --bg-surface: #171614;
+      --bg-surface-elevated: #211f1d;
+      --text-main: #ffffff;
+      --text-muted: #f5f5f4;
+      --text-light: #e7e5e4;
+      --border: #57534e;
+      --border-focus: #d6d3d1;
+      --accent: #ffffff;
+      --accent-hover: #f5f5f4;
+      --accent-soft: rgba(255, 255, 255, 0.08);
+      --accent-border: #a8a29e;
+      --badge-bg: #211f1d;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      overflow-x: hidden;
+    }
+
+    .font-serif-editorial {
+      font-family: 'Newsreader', Georgia, serif;
+      letter-spacing: -0.015em;
+    }
+
+    /* Alternating Left-to-Right & Right-to-Left Scroll Reveals with Scroll-Out Support */
+    .reveal-from-left {
+      opacity: 0;
+      transform: translateX(-35px);
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal-from-right {
+      opacity: 0;
+      transform: translateX(35px);
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal-from-left.is-revealed,
+    .reveal-from-right.is-revealed {
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-from-left, .reveal-from-right {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased bg-[#faf9f5] dark:bg-[#0c0a09] text-stone-950 dark:text-stone-50 selection:bg-stone-300 dark:selection:bg-stone-700 selection:text-stone-950 dark:selection:text-white">
+
+  <!-- =========================================================
+       VIEW 1: MAIN PORTFOLIO PAGE
+       ========================================================= -->
+  <div id="portfolio-page" class="w-full">
+    
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 w-full border-b backdrop-blur-md transition-colors" style="background-color: rgba(var(--bg-page), 0.88); border-color: var(--border);">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+        
+        <!-- Branding (Clean, Human, English Only) -->
+        <a href="#hero" class="flex items-center gap-2.5 hover:opacity-85 transition-opacity">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm text-white bg-stone-900 dark:bg-stone-100 dark:text-stone-900 shadow-sm">
+            H
+          </div>
+          <div class="leading-tight">
+            <span class="font-serif-editorial text-base sm:text-lg font-bold tracking-tight block text-stone-950 dark:text-white">Haytham M. Mohsin</span>
+            <span class="text-[11px] font-mono font-bold block text-stone-800 dark:text-stone-200">Biotechnology & Quality</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden lg:flex items-center gap-6 text-[13px] font-bold text-stone-800 dark:text-stone-200">
+          <a href="#about" class="hover:text-black dark:hover:text-white transition-colors">About</a>
+          <a href="#experience" class="hover:text-black dark:hover:text-white transition-colors">Experience</a>
+          <a href="#research" class="hover:text-black dark:hover:text-white transition-colors">Research</a>
+          <a href="#standards" class="hover:text-black dark:hover:text-white transition-colors">ISO Advisory</a>
+          <a href="#blog" class="hover:text-black dark:hover:text-white transition-colors">Blog</a>
+          <a href="#contact" class="hover:text-black dark:hover:text-white transition-colors">Contact</a>
+        </nav>
+
+        <!-- Header Actions: Standalone Biotech Suite Opener + Theme Switcher -->
+        <div class="flex items-center gap-2.5 sm:gap-3">
+          <!-- Standalone Biotech Suite Trigger Button (Clean Outline Style) -->
+          <button onclick="openBiotechSuiteView()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold border-2 border-stone-800 dark:border-stone-200 hover:bg-stone-900 hover:text-white dark:hover:bg-stone-100 dark:hover:text-stone-900 transition-colors cursor-pointer text-stone-950 dark:text-white">
+            <span>Biotech Suite</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme" class="p-2 rounded-lg border-2 border-stone-400 dark:border-stone-600 text-stone-900 dark:text-stone-100 hover:bg-stone-200/60 dark:hover:bg-stone-800 transition-colors">
+            <i class="fa-solid fa-moon dark:hidden text-sm"></i>
+            <i class="fa-solid fa-sun hidden dark:block text-sm"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="space-y-20 sm:space-y-28 pb-24">
+
+      <!-- SECTION: HERO -->
+      <section id="hero" class="max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          
+          <!-- Left Column: Bio & Title -->
+          <div class="lg:col-span-7 space-y-5">
+            
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold border-2 border-stone-500 dark:border-stone-400 bg-stone-100 dark:bg-stone-900">
+              <span class="w-2 h-2 rounded-full bg-stone-900 dark:bg-stone-100"></span>
+              <span class="text-stone-950 dark:text-stone-100">Islamabad, Pakistan</span>
+            </div>
+
+            <h1 class="font-serif-editorial text-4xl sm:text-6xl font-extrabold tracking-tight leading-[1.1] text-stone-950 dark:text-white">
+              Haytham M. Mohsin
+            </h1>
+
+            <!-- Dynamic Skill Typewriter Effect -->
+            <div class="h-8 flex items-center font-mono text-xs sm:text-sm text-stone-950 dark:text-white font-extrabold" aria-live="polite">
+              <span class="mr-2 text-stone-900 dark:text-stone-100 font-black">&gt;</span>
+              <span id="hero-typewriter" class="tracking-wide"></span>
+              <span class="inline-block w-1.5 h-4 sm:h-5 ml-1 bg-stone-950 dark:bg-white animate-pulse"></span>
+            </div>
+
+            <p class="text-base sm:text-lg font-medium leading-relaxed max-w-xl text-stone-900 dark:text-stone-100">
+              Final-year biotechnology student at IIUI focused on industrial biotechnology, the circular economy, and biomanufacturing. I spend my time identifying practical issues and barriers in industrial biomanufacturing, promoting the One Health initiative, and consulting in ISO quality systems.
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="pt-2 flex flex-wrap gap-3 font-semibold text-xs sm:text-sm">
+              <a href="#contact" class="px-5 py-2.5 rounded-xl font-bold text-white bg-stone-950 hover:bg-stone-800 dark:bg-stone-100 dark:text-stone-950 dark:hover:bg-stone-200 transition-colors shadow-sm inline-flex items-center gap-2">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span>Direct WhatsApp</span>
+              </a>
+              <button onclick="openBiotechSuiteView()" class="px-5 py-2.5 rounded-xl border-2 border-stone-700 dark:border-stone-300 font-bold text-stone-950 dark:text-white transition-all inline-flex items-center gap-2 hover:bg-stone-100 dark:hover:bg-stone-800" style="background-color: var(--bg-surface);">
+                <i class="fa-solid fa-dna text-stone-900 dark:text-stone-100 font-bold"></i>
+                <span>Open Biotech Workstation</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: Profile Picture -->
+          <div class="lg:col-span-5 flex flex-col items-center">
+            <div class="relative w-64 sm:w-72 aspect-[4/5] rounded-2xl overflow-hidden border-2 border-stone-400 dark:border-stone-600 shadow-sm p-1.5 transition-transform hover:scale-[1.01]" style="background-color: var(--bg-surface);">
+              <img 
+                id="hero-portrait-img" 
+                src="https://lh3.googleusercontent.com/d/1kDiPy2_KagTCivcdaLY5pcb7eDudW5R4" 
+                alt="Haytham M. Mohsin" 
+                class="w-full h-full object-cover object-center rounded-xl bg-stone-100 dark:bg-stone-800"
+                onerror="handlePortraitFallback(this)">
+              
+              <!-- Portrait Upload Helper Fallback -->
+              <div id="portrait-uploader-box" class="hidden absolute inset-0 bg-stone-950/95 text-white flex flex-col items-center justify-center p-4 text-center text-xs">
+                <i class="fa-solid fa-image text-2xl mb-2 text-stone-200"></i>
+                <p class="font-bold mb-1">Load Profile Photo</p>
+                <p class="text-stone-200 text-[11px] mb-3">Select your local photo file</p>
+                <label class="px-3 py-1.5 bg-stone-800 hover:bg-stone-700 rounded-lg cursor-pointer font-bold border border-stone-500">
+                  <span>Browse Image</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="uploadLocalPortrait(event)">
+                </label>
+              </div>
+            </div>
+            <div class="mt-3 text-center">
+              <span class="text-xs font-mono font-bold text-stone-800 dark:text-stone-200">International Islamic University, Islamabad</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 01: ABOUT -->
+      <section id="about" class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="space-y-2 mb-8">
+          <div class="text-xs font-mono font-bold uppercase tracking-wider text-stone-950 dark:text-stone-200">01 / About</div>
+          <h2 class="font-serif-editorial text-3xl sm:text-4xl font-bold tracking-tight text-stone-950 dark:text-white">Background & Education</h2>
+        </div>
+
+        <div class="space-y-4 text-base sm:text-lg font-medium leading-relaxed max-w-4xl mb-12 text-stone-900 dark:text-stone-100">
+          <p>
+            I am a final-year Biotechnology student at the International Islamic University, Islamabad (IIUI), working across molecular biology, industrial quality systems, and bioproduct development. Having completed my schooling in Saudi Arabia, I bring an adaptable, bilingual approach to collaborative scientific projects.
+          </p>
+          <p>
+            My work spans wet-lab research, such as plant gene expression studies and green nanoparticle synthesis, alongside industrial consulting for ISO standards and student-led scientific leadership through PBSS.
+          </p>
+        </div>
+
+        <!-- Alternating Cards Grid: Left, Right, Left -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Card 1: Reveal from Left -->
+          <div class="reveal-from-left p-6 rounded-2xl border-2 border-stone-400 dark:border-stone-600 transition-all hover:border-stone-900 dark:hover:border-stone-300" style="background-color: var(--bg-surface);">
+            <div class="text-xs font-mono font-bold text-stone-950 dark:text-stone-200 mb-2">2023 — 2027 (Final Year)</div>
+            <h3 class="font-serif-editorial text-xl font-bold mb-1 text-stone-950 dark:text-white">BS in Biotechnology</h3>
+            <div class="text-sm font-bold mb-3 text-stone-900 dark:text-stone-200">International Islamic University, Islamabad</div>
+            <ul class="text-xs space-y-2 font-medium text-stone-900 dark:text-stone-200">
+              <li>• Department rank in scientific poster presentation (Extremophiles in Biotech)</li>
+              <li>• Self-directed research on biodegradable plastics from biowastes</li>
+              <li>• Core team leadership in organizing student job fairs and departmental symposia</li>
+            </ul>
+          </div>
+
+          <!-- Card 2: Reveal from Right -->
+          <div class="reveal-from-right p-6 rounded-2xl border-2 border-stone-400 dark:border-stone-600 transition-all hover:border-stone-900 dark:hover:border-stone-300" style="background-color: var(--bg-surface);">
+            <div class="text-xs font-mono font-bold text-stone-950 dark:text-stone-200 mb-2">2024 — 2025 · Grade A</div>
+            <h3 class="font-serif-editorial text-xl font-bold mb-1 text-stone-950 dark:text-white">Diploma in Arabic Language</h3>
+            <div class="text-sm font-bold mb-3 text-stone-900 dark:text-stone-200">International Islamic University, Islamabad</div>
+            <ul class="text-xs space-y-2 font-medium text-stone-900 dark:text-stone-200">
+              <li>• Advanced classical & contemporary Arabic comprehension</li>
+              <li>• Native fluency bridging Middle Eastern and South Asian institutions</li>
+              <li>• Professional translation and scientific communication capabilities</li>
+            </ul>
+          </div>
+
+          <!-- Card 3: Reveal from Left -->
+          <div class="reveal-from-left p-6 rounded-2xl border-2 border-stone-400 dark:border-stone-600 transition-all hover:border-stone-900 dark:hover:border-stone-300" style="background-color: var(--bg-surface);">
+            <div class="text-xs font-mono font-bold text-stone-950 dark:text-stone-200 mb-2">2022 — 2023</div>
+            <h3 class="font-serif-editorial text-xl font-bold mb-1 text-stone-950 dark:text-white">FSc Pre-Medical</h3>
+            <div class="text-sm font-bold mb-3 text-stone-900 dark:text-stone-200">Pakistan International School Al Jubail</div>
+            <ul class="text-xs space-y-2 font-medium text-stone-900 dark:text-stone-200">
+              <li>• 1st Position in Regional Essay Writing Competition</li>
+              <li>• 3rd Prize in Interschool Science & Art Exhibition</li>
+              <li>• Solid foundation in molecular biology and organic chemistry</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 02: EXPERIENCE -->
+      <section id="experience" class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="space-y-2 mb-8">
+          <div class="text-xs font-mono font-bold uppercase tracking-wider text-stone-950 dark:text-stone-200">02 / Experience</div>
+          <h2 class="font-serif-editorial text-3xl sm:text-4xl font-bold tracking-tight text-stone-950 dark:text-white">Professional & Laboratory Roles</h2>
+        </div>
+
+        <div class="space-y-6">
+          
+          <!-- Role 1: NIGAB (Left) -->
+          <div class="reveal-from-left p-6 sm:p-8 rounded-2xl border-2 border-stone-400 dark:border-stone-600" style="background-color: var(--bg-surface);">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div>
+                <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md border-2 border-stone-600 dark:border-stone-400 text-stone-950 dark:text-white">Genome Editing & Diagnostics</span>
+                <h3 class="font-serif-editorial text-2xl font-bold mt-2 text-stone-950 dark:text-white">Biotechnology Summer Intern</h3>
+                <div class="text-sm font-bold text-stone-900 dark:text-stone-200">National Institute for Genomics and Advanced Biotechnology (NIGAB), Islamabad</div>
+              </div>
+              <div class="text-xs font-mono font-bold text-stone-800 dark:text-stone-300">Jun 2026 — Sep 2026 · 4 mos</div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs font-medium text-stone-900 dark:text-stone-100">
+              <div class="p-3.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
+                <span class="font-bold text-stone-950 dark:text-white block mb-1">DNA/RNA Extraction & qPCR</span>
+                Extractions on wheat and tomatoes using TRIzol and spin columns; PCR, RT-PCR, and real-time qPCR (SYBR Green) for gene expression analysis.
+              </div>
+              <div class="p-3.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
+                <span class="font-bold text-stone-950 dark:text-white block mb-1">Primer Design (SnapGene & NCBI)</span>
+                Designed primers to quantify <code class="font-mono font-bold text-black dark:text-white">OsARF11</code> expression under stress gradients.
+              </div>
+              <div class="p-3.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
+                <span class="font-bold text-stone-950 dark:text-white block mb-1">Tissue Culture & Transformation</span>
+                Prepared MS and Hoagland media; excised wheat embryos; Agrobacterium transformation in potatoes for CRISPR applications.
+              </div>
+              <div class="p-3.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
+                <span class="font-bold text-stone-950 dark:text-white block mb-1">Drought Testing & Nanoparticles</span>
+                Screened 48 rice varieties for drought tolerance via PEG assays; observed biocontainment tests of gallium nanoparticles.
+              </div>
+            </div>
+          </div>
+
+          <!-- Role 2: PCSIR (Right) -->
+          <div class="reveal-from-right p-6 sm:p-8 rounded-2xl border-2 border-stone-400 dark:border-stone-600" style="background-color: var(--bg-surface);">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div>
+                <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md border-2 border-stone-600 dark:border-stone-400 text-stone-950 dark:text-white">Nanotechnology & Industrial Testing</span>
+                <h3 class="font-serif-editorial text-2xl font-bold mt-2 text-stone-950 dark:text-white">Research Intern</h3>
+                <div class="text-sm font-bold text-stone-900 dark:text-stone-200">Pakistan Council of Scientific and Industrial Research (PCSIR), Islamabad</div>
+              </div>
+              <div class="text-xs font-mono font-bold text-stone-800 dark:text-stone-300">Nov 2025 — Mar 2026 · 5 mos</div>
+            </div>
+            <ul class="space-y-2 list-disc list-inside text-xs sm:text-sm font-medium text-stone-900 dark:text-stone-100">
+              <li><strong>Green Nanoparticle Synthesis:</strong> Green synthesis from botanical extracts (Fenugreek, Moringa, Flax Seed, Hemp leaves).</li>
+              <li><strong>Spectrophotometric Kinetics:</strong> Quantitative analysis tracking metal ion reduction and particle stability.</li>
+              <li><strong>Microbiological Testing:</strong> APHA-standard water, soil, and food tests for coliform detection and microbial purity.</li>
+            </ul>
+          </div>
+
+          <!-- Role 3: Opexe (Left) -->
+          <div class="reveal-from-left p-6 sm:p-8 rounded-2xl border-2 border-stone-400 dark:border-stone-600" style="background-color: var(--bg-surface);">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div>
+                <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md border-2 border-stone-600 dark:border-stone-400 text-stone-950 dark:text-white">Quality Systems & Standards</span>
+                <h3 class="font-serif-editorial text-2xl font-bold mt-2 text-stone-950 dark:text-white">ISO Consultant / Quality System Coordinator</h3>
+                <div class="text-sm font-bold text-stone-900 dark:text-stone-200">Opexe Consultancy · Jubail, Saudi Arabia (Advisory)</div>
+              </div>
+              <div class="text-xs font-mono font-bold text-stone-800 dark:text-stone-300">Oct 2021 — Present · 3+ yrs</div>
+            </div>
+            <p class="text-xs sm:text-sm font-medium leading-relaxed mb-3 text-stone-900 dark:text-stone-100">
+              3-year ongoing consulting experience assisting clients with standard operating procedures, documentation, and compliance frameworks:
+            </p>
+            <div class="flex flex-wrap gap-2 font-mono text-xs">
+              <span class="px-2.5 py-1 rounded border-2 border-stone-400 dark:border-stone-600 font-bold text-stone-950 dark:text-white bg-stone-100 dark:bg-stone-900">ISO 9001 (QMS)</span>
+              <span class="px-2.5 py-1 rounded border-2 border-stone-400 dark:border-stone-600 font-bold text-stone-950 dark:text-white bg-stone-100 dark:bg-stone-900">ISO 14001 (EMS)</span>
+              <span class="px-2.5 py-1 rounded border-2 border-stone-400 dark:border-stone-600 font-bold text-stone-950 dark:text-white bg-stone-100 dark:bg-stone-900">ISO 45001 (OH&S)</span>
+              <span class="px-2.5 py-1 rounded border-2 border-stone-400 dark:border-stone-600 font-bold text-stone-950 dark:text-white bg-stone-100 dark:bg-stone-900">ISO 50001 (Energy)</span>
+            </div>
+          </div>
+
+          <!-- Role 4: PBSS (Right) -->
+          <div class="reveal-from-right p-6 sm:p-8 rounded-2xl border-2 border-stone-400 dark:border-stone-600" style="background-color: var(--bg-surface);">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div>
+                <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md border-2 border-stone-600 dark:border-stone-400 text-stone-950 dark:text-white">Leadership & Operations</span>
+                <h3 class="font-serif-editorial text-2xl font-bold mt-2 text-stone-950 dark:text-white">Core Team Lead</h3>
+                <div class="text-sm font-bold text-stone-900 dark:text-stone-200">Pakistan Biotechnology Students' Society (PBSS), IIUI</div>
+              </div>
+              <div class="text-xs font-mono font-bold text-stone-800 dark:text-stone-300">May 2024 — Present · 2+ yrs</div>
+            </div>
+            <ul class="space-y-2 list-disc list-inside text-xs sm:text-sm font-medium text-stone-900 dark:text-stone-100">
+              <li><strong>Student Job Fair 2025:</strong> Spearheaded campus-wide fair hosting 40+ industrial companies and 300+ on-spot interviews.</li>
+              <li><strong>Bio-Merchant Startup Stall:</strong> Won 3rd Prize with commercialized items (Bio-Enzymatic Soap, Bio-Acne Serum).</li>
+              <li><strong>One Health Symposium 2025:</strong> Managed logistics and branding across human, animal, and plant health tracks.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 03: RESEARCH & INNOVATIONS -->
+      <section id="research" class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="space-y-2 mb-8">
+          <div class="text-xs font-mono font-bold uppercase tracking-wider text-stone-950 dark:text-stone-200">03 / Research & Innovation</div>
+          <h2 class="font-serif-editorial text-3xl sm:text-4xl font-bold tracking-tight text-stone-950 dark:text-white">Competitions, Hackathons & Posters</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Research 1 (Left) -->
+          <div class="reveal-from-left p-6 sm:p-7 rounded-2xl border-2 border-stone-400 dark:border-stone-600 flex flex-col justify-between" style="background-color: var(--bg-surface);">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded border-2 border-stone-600 dark:border-stone-400 text-stone-950 dark:text-white">
+                  🥈 2nd Prize Winner
+                </span>
+                <span class="text-xs font-mono font-bold text-stone-800 dark:text-stone-300">Inno-Vent 2025</span>
+              </div>
+              <h3 class="font-serif-editorial text-xl font-bold text-stone-950 dark:text-white">Biodegradable Plastics from Biowastes</h3>
+              <p class="text-xs sm:text-sm font-medium leading-relaxed text-stone-900 dark:text-stone-100">
+                Awarded 2nd Prize in a competition of ~100 proposals evaluated by industry and academic experts (BIC IIUI in collaboration with IBCC). Synthesized biodegradable bioplastics utilizing poultry waste keratin (chicken feathers) and agro-industrial cellulose residues.
+              </p>
+            </div>
+            <div class="pt-4 border-t-2 border-stone-300 dark:border-stone-700 mt-4 text-[11px] font-mono font-bold flex items-center justify-between text-stone-900 dark:text-stone-100">
+              <span>BIC & Industry Evaluators</span>
+              <span class="text-stone-950 dark:text-white">Awarded by Dean, ORIC & IBCC</span>
+            </div>
+          </div>
+
+          <!-- Research 2 (Right) -->
+          <div class="reveal-from-right p-6 sm:p-7 rounded-2xl border-2 border-stone-400 dark:border-stone-600 flex flex-col justify-between" style="background-color: var(--bg-surface);">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded border-2 border-stone-600 dark:border-stone-400 text-stone-950 dark:text-white">
+                  National Participation
+                </span>
+                <span class="text-xs font-mono font-bold text-stone-800 dark:text-stone-300">Saudi Arabia</span>
+              </div>
+              <h3 class="font-serif-editorial text-xl font-bold text-stone-950 dark:text-white">Asir Region & Makkah Hackathons</h3>
+              <p class="text-xs sm:text-sm font-medium leading-relaxed text-stone-900 dark:text-stone-100">
+                Participated in both the Asir Region Hackathon and Makkah Hackathon, developing tech-driven biotech concepts addressing ecological preservation, environmental monitoring, and sustainable bio-based systems.
+              </p>
+            </div>
+            <div class="pt-4 border-t-2 border-stone-300 dark:border-stone-700 mt-4 text-[11px] font-mono font-bold flex items-center justify-between text-stone-900 dark:text-stone-100">
+              <span>Rapid Prototyping</span>
+              <span>Sustainable Tech Solutions</span>
+            </div>
+          </div>
+
+          <!-- Research 3 (Left) -->
+          <div class="reveal-from-left p-6 sm:p-7 rounded-2xl border-2 border-stone-400 dark:border-stone-600 flex flex-col justify-between" style="background-color: var(--bg-surface);">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded border-2 border-stone-600 dark:border-stone-400 text-stone-950 dark:text-white">
+                  EU Funded Program
+                </span>
+                <span class="text-xs font-mono font-bold text-stone-800 dark:text-stone-300">ULPGC Spain · EIT Food</span>
+              </div>
+              <h3 class="font-serif-editorial text-xl font-bold text-stone-950 dark:text-white">Biotech Venture Pathway (2026)</h3>
+              <p class="text-xs sm:text-sm font-medium leading-relaxed text-stone-900 dark:text-stone-100">
+                Completed the Entrepreneurial Capacity Building Programme via the Biotech Venture Pathway funded by the European Union. Focused on deep-tech translation, circular economy, and taking biotech innovations from lab bench to market.
+              </p>
+            </div>
+            <div class="pt-4 border-t-2 border-stone-300 dark:border-stone-700 mt-4 text-[11px] font-mono font-bold flex items-center justify-between text-stone-900 dark:text-stone-100">
+              <span>Mentored by Industry Founders</span>
+              <span>Lab-to-Market Translation</span>
+            </div>
+          </div>
+
+          <!-- Research 4 (Right) -->
+          <div class="reveal-from-right p-6 sm:p-7 rounded-2xl border-2 border-stone-400 dark:border-stone-600 flex flex-col justify-between" style="background-color: var(--bg-surface);">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded border-2 border-stone-600 dark:border-stone-400 text-stone-950 dark:text-white">
+                  🥇 1st Position Poster
+                </span>
+                <span class="text-xs font-mono font-bold text-stone-800 dark:text-stone-300">Departmental Contest</span>
+              </div>
+              <h3 class="font-serif-editorial text-xl font-bold text-stone-950 dark:text-white">Extremophiles in Industrial Biotechnology</h3>
+              <p class="text-xs sm:text-sm font-medium leading-relaxed text-stone-900 dark:text-stone-100">
+                Winning research poster evaluating extremozymes (Taq polymerase, PETases, cellulases) harvested from thermophiles, psychrophiles, halophiles, and radioresistant microbes for sustainable industrial biocatalysis.
+              </p>
+            </div>
+            <div class="pt-4 border-t-2 border-stone-300 dark:border-stone-700 mt-4 text-[11px] font-mono font-bold flex items-center justify-between text-stone-900 dark:text-stone-100">
+              <span>Dept. of Biological Sciences, IIUI</span>
+              <span>Presented Research</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 04: QUALITY STANDARDS & ADVISORY -->
+      <section id="standards" class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="space-y-2 mb-8">
+          <div class="text-xs font-mono font-bold uppercase tracking-wider text-stone-950 dark:text-stone-200">04 / Standards & Quality</div>
+          <h2 class="font-serif-editorial text-3xl sm:text-4xl font-bold tracking-tight text-stone-950 dark:text-white">ISO Management Frameworks</h2>
+          <p class="text-sm font-medium max-w-2xl text-stone-900 dark:text-stone-200">
+            Hands-on compliance, SOP development, and audit readiness gained over 3 years of advisory support.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          
+          <div class="reveal-from-left p-5 rounded-2xl border-2 border-stone-400 dark:border-stone-600" style="background-color: var(--bg-surface);">
+            <div class="font-mono text-xs font-bold text-stone-950 dark:text-stone-200 mb-1">ISO 9001:2015</div>
+            <h4 class="font-serif-editorial font-bold text-base mb-1.5 text-stone-950 dark:text-white">Quality Management Systems (QMS)</h4>
+            <p class="text-xs font-medium leading-relaxed text-stone-900 dark:text-stone-100">
+              SOP creation, process mapping, customer feedback loops, and internal audit preparation to establish consistent quality output.
+            </p>
+          </div>
+
+          <div class="reveal-from-right p-5 rounded-2xl border-2 border-stone-400 dark:border-stone-600" style="background-color: var(--bg-surface);">
+            <div class="font-mono text-xs font-bold text-stone-950 dark:text-stone-200 mb-1">ISO 14001:2015</div>
+            <h4 class="font-serif-editorial font-bold text-base mb-1.5 text-stone-950 dark:text-white">Environmental Management (EMS)</h4>
+            <p class="text-xs font-medium leading-relaxed text-stone-900 dark:text-stone-100">
+              Aspect-impact identification, hazardous waste minimization protocols, and alignment with corporate environmental sustainability mandates.
+            </p>
+          </div>
+
+          <div class="reveal-from-left p-5 rounded-2xl border-2 border-stone-400 dark:border-stone-600" style="background-color: var(--bg-surface);">
+            <div class="font-mono text-xs font-bold text-stone-950 dark:text-stone-200 mb-1">ISO 45001:2018</div>
+            <h4 class="font-serif-editorial font-bold text-base mb-1.5 text-stone-950 dark:text-white">Occupational Health & Safety</h4>
+            <p class="text-xs font-medium leading-relaxed text-stone-900 dark:text-stone-100">
+              Hazard identification, lab and workshop risk assessments, biosafety containment reviews, and incident prevention frameworks.
+            </p>
+          </div>
+
+          <div class="reveal-from-right p-5 rounded-2xl border-2 border-stone-400 dark:border-stone-600" style="background-color: var(--bg-surface);">
+            <div class="font-mono text-xs font-bold text-stone-950 dark:text-stone-200 mb-1">ISO 50001:2018</div>
+            <h4 class="font-serif-editorial font-bold text-base mb-1.5 text-stone-950 dark:text-white">Energy Management Systems</h4>
+            <p class="text-xs font-medium leading-relaxed text-stone-900 dark:text-stone-100">
+              Baseline energy consumption monitoring, efficiency indicators, and integrating energy-saving operational benchmarks.
+            </p>
+          </div>
+
+          <!-- ISO 17025 Dedicated Focus with In Progress Badge -->
+          <div class="reveal-from-left p-5 rounded-2xl border-2 border-stone-500 dark:border-stone-400 sm:col-span-2 lg:col-span-2 relative overflow-hidden" style="background-color: var(--bg-surface);">
+            <div class="flex items-center gap-2 mb-2 flex-wrap">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded text-[11px] font-mono font-bold border-2 border-stone-700 dark:border-stone-300 text-stone-950 dark:text-white">
+                Active Professional Progression
+              </span>
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-bold border-2 border-stone-600 dark:border-stone-400 text-stone-900 dark:text-stone-200">
+                In Progress
+              </span>
+            </div>
+            <h4 class="font-serif-editorial font-bold text-lg mb-1 text-stone-950 dark:text-white">ISO/IEC 17025 — Testing & Calibration Laboratories</h4>
+            <p class="text-xs sm:text-sm font-medium leading-relaxed text-stone-900 dark:text-stone-100">
+              Currently expanding technical advisory capabilities toward ISO/IEC 17025. Leveraging wet-lab experience at NIGAB and PCSIR to bridge scientific assay accuracy (equipment calibration, method validation, measurement uncertainty, chain of custody) with international laboratory accreditation standards.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 05: BLOG -->
+      <section id="blog" class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="space-y-2 mb-8">
+          <div class="text-xs font-mono font-bold uppercase tracking-wider text-stone-950 dark:text-stone-200">05 / Blog</div>
+          <h2 class="font-serif-editorial text-3xl sm:text-4xl font-bold tracking-tight text-stone-950 dark:text-white">Blog & Scientific Reflections</h2>
+          <p class="text-sm font-medium max-w-2xl text-stone-900 dark:text-stone-200">
+            Reflections on cellular precision, natural engineering, and biological paradoxes published on LinkedIn.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Post 1 (Left) -->
+          <article class="reveal-from-left p-6 sm:p-7 rounded-2xl border-2 border-stone-400 dark:border-stone-600 flex flex-col justify-between" style="background-color: var(--bg-surface);">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between text-xs font-mono font-bold text-stone-900 dark:text-stone-200">
+                <span>Blog Post · Part 1</span>
+                <span>1,870+ Views</span>
+              </div>
+              <h3 class="font-serif-editorial text-xl font-bold leading-snug text-stone-950 dark:text-white">Molecular Biology Paradoxes: The Limits of DNA</h3>
+              <p class="text-xs sm:text-sm font-medium leading-relaxed text-stone-900 dark:text-stone-100">
+                "What amazes me most isn't what DNA achieves; it's what it is incapable of doing. DNA cannot move a molecule, generate energy, or read itself. Letters don't act — they describe. You need a ribosome to read DNA, but DNA codes the ribosome. In biology, 'almost working' is death; life begins fully functional."
+              </p>
+            </div>
+            <div class="pt-4 border-t-2 border-stone-300 dark:border-stone-700 mt-4 flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-stone-950 dark:text-stone-100">#NoDesign Series</span>
+              <a href="https://linkedin.com/in/haytham-mohsin" target="_blank" class="text-xs font-mono font-bold hover:underline flex items-center gap-1 text-stone-950 dark:text-white">
+                <span>Read on LinkedIn</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              </a>
+            </div>
+          </article>
+
+          <!-- Post 2 (Right) -->
+          <article class="reveal-from-right p-6 sm:p-7 rounded-2xl border-2 border-stone-400 dark:border-stone-600 flex flex-col justify-between" style="background-color: var(--bg-surface);">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between text-xs font-mono font-bold text-stone-900 dark:text-stone-200">
+                <span>Blog Post · Part 2</span>
+                <span>820+ Views</span>
+              </div>
+              <h3 class="font-serif-editorial text-xl font-bold leading-snug text-stone-950 dark:text-white">The Intracellular Logistics Highway</h3>
+              <p class="text-xs sm:text-sm font-medium leading-relaxed text-stone-900 dark:text-stone-100">
+                "Inside a cell, precision is absolute. Lysosomal acid enzymes are prepared before the boundary is built. Dangerous proteins are produced disassembled and walked by kinesin motor proteins along microtubule highways. The logistics system knows the exact destination before the molecule even exists."
+              </p>
+            </div>
+            <div class="pt-4 border-t-2 border-stone-300 dark:border-stone-700 mt-4 flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-stone-950 dark:text-stone-100">#CellBiology</span>
+              <a href="https://linkedin.com/in/haytham-mohsin" target="_blank" class="text-xs font-mono font-bold hover:underline flex items-center gap-1 text-stone-950 dark:text-white">
+                <span>Read on LinkedIn</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- SECTION 06: CONTACT (DIRECT WHATSAPP CONNECT) -->
+      <section id="contact" class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="space-y-2 mb-8">
+          <div class="text-xs font-mono font-bold uppercase tracking-wider text-stone-950 dark:text-stone-200">06 / Communication</div>
+          <h2 class="font-serif-editorial text-3xl sm:text-4xl font-bold tracking-tight text-stone-950 dark:text-white">Direct WhatsApp Connect</h2>
+          <p class="text-sm font-medium max-w-2xl text-stone-900 dark:text-stone-200">
+            Reach out directly on WhatsApp for biotech research inquiries, ISO advisory consultations, or academic collaborations.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Direct Channels Card (Left) -->
+          <div class="reveal-from-left lg:col-span-5 space-y-6">
+            <div class="p-6 rounded-2xl border-2 border-stone-400 dark:border-stone-600 space-y-4" style="background-color: var(--bg-surface);">
+              <div class="text-xs font-mono uppercase tracking-wider font-bold text-stone-950 dark:text-white">Direct Channels</div>
+              
+              <div class="space-y-3 font-mono text-xs sm:text-sm">
+                <!-- WhatsApp line (KSA) -->
+                <div class="p-3.5 rounded-xl border-2 border-stone-400 dark:border-stone-600 flex items-center justify-between bg-stone-50 dark:bg-stone-900">
+                  <div>
+                    <div class="text-[11px] text-stone-950 dark:text-stone-200 font-bold">PRIMARY WHATSAPP (KSA)</div>
+                    <div class="font-extrabold text-stone-950 dark:text-white mt-0.5 text-sm sm:text-base">+966 54 505 9879</div>
+                  </div>
+                  <a href="https://wa.me/966545059879?text=Hello%20Haytham,%20I%20would%20like%20to%20connect." target="_blank" class="px-3.5 py-1.5 rounded-lg bg-stone-950 text-white hover:bg-stone-800 dark:bg-stone-100 dark:text-stone-950 dark:hover:bg-stone-200 font-bold text-xs transition-colors shadow-sm">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Chat
+                  </a>
+                </div>
+
+                <!-- Calling line (PK) -->
+                <div class="p-3.5 rounded-xl border-2 border-stone-400 dark:border-stone-600 flex items-center justify-between bg-stone-50 dark:bg-stone-900">
+                  <div>
+                    <div class="text-[11px] text-stone-900 dark:text-stone-300 font-bold">DIRECT CALL (PK)</div>
+                    <div class="font-extrabold text-stone-950 dark:text-white mt-0.5 text-sm sm:text-base">+92 333 883 7778</div>
+                  </div>
+                  <a href="tel:+923338837778" class="px-3.5 py-1.5 rounded-lg border-2 border-stone-600 dark:border-stone-400 text-stone-950 dark:text-white font-bold hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors">
+                    <i class="fa-solid fa-phone text-xs"></i> Call
+                  </a>
+                </div>
+              </div>
+
+              <div class="pt-2 border-t-2 border-stone-300 dark:border-stone-700 space-y-2 text-xs font-medium text-stone-900 dark:text-stone-100">
+                <div class="flex items-center justify-between">
+                  <span>Email:</span>
+                  <a href="mailto:haithummohsin@gmail.com" class="font-mono font-bold hover:underline text-black dark:text-white">haithummohsin@gmail.com</a>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span>Location:</span>
+                  <span class="font-mono font-semibold">Jubail, Saudi Arabia · Islamabad, PK</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span>LinkedIn:</span>
+                  <a href="https://linkedin.com/in/haytham-mohsin" target="_blank" class="font-mono font-bold hover:underline text-black dark:text-white">linkedin.com/in/haytham-mohsin</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message Composer (Right) -->
+          <div class="reveal-from-right lg:col-span-7">
+            <div class="p-6 sm:p-8 rounded-2xl border-2 border-stone-400 dark:border-stone-600 space-y-5" style="background-color: var(--bg-surface);">
+              <div>
+                <h3 class="font-serif-editorial text-2xl font-bold text-stone-950 dark:text-white">Quick WhatsApp Dispatch</h3>
+                <p class="text-xs sm:text-sm mt-1 font-medium text-stone-900 dark:text-stone-200">
+                  Select a topic or type your message to open directly in WhatsApp with <strong class="text-black dark:text-white">+966 54 505 9879</strong>.
+                </p>
+              </div>
+
+              <!-- Quick Topic Chips -->
+              <div class="space-y-2">
+                <span class="text-xs font-mono font-bold text-stone-950 dark:text-white">Select Conversation Topic:</span>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" onclick="setWhatsAppTopic('Biotech Lab Research & Collaboration')" class="px-3 py-1.5 rounded-lg text-xs font-bold border-2 border-stone-400 dark:border-stone-600 hover:border-black dark:hover:border-white transition-colors bg-stone-100 dark:bg-stone-900 text-stone-950 dark:text-white">
+                    🔬 Biotech Research
+                  </button>
+                  <button type="button" onclick="setWhatsAppTopic('ISO Standards & Systems Advisory')" class="px-3 py-1.5 rounded-lg text-xs font-bold border-2 border-stone-400 dark:border-stone-600 hover:border-black dark:hover:border-white transition-colors bg-stone-100 dark:bg-stone-900 text-stone-950 dark:text-white">
+                    📋 ISO Quality Advisory
+                  </button>
+                  <button type="button" onclick="setWhatsAppTopic('Bioplastics & Commercialization')" class="px-3 py-1.5 rounded-lg text-xs font-bold border-2 border-stone-400 dark:border-stone-600 hover:border-black dark:hover:border-white transition-colors bg-stone-100 dark:bg-stone-900 text-stone-950 dark:text-white">
+                    🌱 Bioplastics & Innovation
+                  </button>
+                  <button type="button" onclick="setWhatsAppTopic('General Academic & Career Discussion')" class="px-3 py-1.5 rounded-lg text-xs font-bold border-2 border-stone-400 dark:border-stone-600 hover:border-black dark:hover:border-white transition-colors bg-stone-100 dark:bg-stone-900 text-stone-950 dark:text-white">
+                    💬 General Inquiry
+                  </button>
+                </div>
+              </div>
+
+              <!-- Message Customizer Input -->
+              <div class="space-y-1.5">
+                <label for="wa-custom-msg" class="text-xs font-mono font-bold text-stone-950 dark:text-white">Your Message:</label>
+                <textarea 
+                  id="wa-custom-msg" 
+                  rows="3" 
+                  class="w-full p-3 text-xs sm:text-sm font-medium rounded-xl border-2 border-stone-400 dark:border-stone-600 focus:outline-none focus:border-stone-900 dark:focus:border-stone-100 text-stone-950 dark:text-white" 
+                  style="background-color: var(--bg-page);"
+                  placeholder="Hello Haytham, I saw your portfolio and would like to discuss..."></textarea>
+              </div>
+
+              <!-- Dispatch Button -->
+              <button 
+                type="button" 
+                onclick="dispatchWhatsApp()" 
+                class="w-full py-3 rounded-xl font-bold text-sm text-white bg-stone-950 hover:bg-stone-800 dark:bg-stone-100 dark:text-stone-950 dark:hover:bg-stone-200 transition-colors shadow-sm flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Open WhatsApp Chat (+966 54 505 9879)</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t-2 border-stone-300 dark:border-stone-700 py-10">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono font-bold text-stone-800 dark:text-stone-200">
+        <div>Haytham M. Mohsin · IIUI Biotechnology</div>
+        <div class="flex items-center gap-4">
+          <a href="https://linkedin.com/in/haytham-mohsin" target="_blank" class="hover:underline text-stone-950 dark:text-white">LinkedIn</a>
+          <a href="mailto:haithummohsin@gmail.com" class="hover:underline text-stone-950 dark:text-white">Email</a>
+          <a href="#hero" class="hover:underline text-stone-950 dark:text-white">Back to Top ↑</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // =========================================================
+    // INITIALIZATION ON DOM CONTENT LOADED
+    // =========================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      // Default to Light theme unless manually chosen as dark
+      const savedTheme = localStorage.getItem('haytham_theme_manual');
+      if (savedTheme === 'dark') {
+        setTheme('dark');
+      } else {
+        setTheme('light');
+      }
+
+      // Check for saved local image data in browser
+      const savedPortrait = localStorage.getItem('haytham_portrait_data');
+      if (savedPortrait) {
+        const photo = document.getElementById('hero-portrait-img');
+        if (photo) photo.src = savedPortrait;
+      }
+
+      // Initialize Dynamic Skill Typewriter
+      initTypewriter();
+
+      // Initialize Alternating Scroll Observer
+      initScrollReveal();
+    });
+
+    // =========================================================
+    // DYNAMIC SKILL TYPEWRITER & ERASER
+    // =========================================================
+    function initTypewriter() {
+      const el = document.getElementById('hero-typewriter');
+      if (!el) return;
+
+      const phrases = [
+        'Industrial Biotechnology',
+        'Circular Economy',
+        'Biomanufacturing',
+        'One Health Promoter',
+        'Bio-Merchant Venture',
+        'Biodegradable Plastics',
+        'Biowaste Valorization',
+        'ISO Quality Systems',
+        'Extremophiles & Biocatalysis',
+        'Green Nanoparticles',
+        'Molecular Diagnostics',
+        'Biotech Entrepreneurship'
+      ];
+
+      let phraseIdx = 0;
+      let charIdx = 0;
+      let isDeleting = false;
+      const typeSpeed = 65;
+      const eraseSpeed = 35;
+      const holdTime = 1600;
+
+      function tick() {
+        const current = phrases[phraseIdx];
+        if (isDeleting) {
+          charIdx--;
+          el.textContent = current.substring(0, charIdx);
+          if (charIdx <= 0) {
+            isDeleting = false;
+            phraseIdx = (phraseIdx + 1) % phrases.length;
+            setTimeout(tick, 300);
+            return;
+          }
+          setTimeout(tick, eraseSpeed);
+        } else {
+          charIdx++;
+          el.textContent = current.substring(0, charIdx);
+          if (charIdx >= current.length) {
+            isDeleting = true;
+            setTimeout(tick, holdTime);
+            return;
+          }
+          setTimeout(tick, typeSpeed);
+        }
+      }
+
+      tick();
+    }
+
+    // =========================================================
+    // THEME MANAGEMENT (Default Light; Manual Switch)
+    // =========================================================
+    function setTheme(theme, isManual = false) {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        if (isManual) localStorage.setItem('haytham_theme_manual', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        if (isManual) localStorage.setItem('haytham_theme_manual', 'light');
+      }
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      setTheme(isDark ? 'light' : 'dark', true);
+    }
+
+    // =========================================================
+    // ALTERNATING SCROLL REVEAL & SCROLL-OUT OBSERVER
+    // =========================================================
+    function initScrollReveal() {
+      const reveals = document.querySelectorAll('.reveal-from-left, .reveal-from-right');
+      if (!('IntersectionObserver' in window)) {
+        reveals.forEach(el => el.classList.add('is-revealed'));
+        return;
+      }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+          } else {
+            // Smoothly animate elements out when scrolling upward away from them
+            // and silently reset elements that scrolled fully past the top
+            if (entry.boundingClientRect.top > 0 || entry.boundingClientRect.bottom <= 0) {
+              entry.target.classList.remove('is-revealed');
+            }
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+      reveals.forEach(el => observer.observe(el));
+    }
+
+    // =========================================================
+    // DIRECT WHATSAPP CONNECT LOGIC
+    // =========================================================
+    function setWhatsAppTopic(topic) {
+      const input = document.getElementById('wa-custom-msg');
+      if (input) {
+        input.value = `Hello Haytham, I would like to connect with you regarding ${topic}.`;
+        input.focus();
+      }
+    }
+
+    function dispatchWhatsApp() {
+      const msgInput = document.getElementById('wa-custom-msg');
+      const text = msgInput && msgInput.value.trim() 
+        ? msgInput.value.trim() 
+        : 'Hello Haytham, I would like to connect with you regarding your biotechnology portfolio.';
+      
+      const targetPhone = '966545059879';
+      const encodedMsg = encodeURIComponent(text);
+      const url = `https://wa.me/${targetPhone}?text=${encodedMsg}`;
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
